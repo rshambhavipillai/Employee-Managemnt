@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  mysql_data:
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=secret123
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    ports:
+      - 8080:80
+    links:
+      - mariadb:db
+    restart: always
